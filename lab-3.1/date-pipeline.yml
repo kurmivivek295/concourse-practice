@@ -1,0 +1,12 @@
+---
+jobs:
+- name: date-job
+  plan:
+  - task: date-task
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu, tag: latest}
+      run:
+        path: date

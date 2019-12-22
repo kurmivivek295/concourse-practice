@@ -1,0 +1,22 @@
+---
+resources:
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+- name: python-scripts
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/python-scripts.git
+    branch: develop
+
+jobs:
+- name: job-params
+  plan:
+  - get: concourse-tutorials
+  - get: python-scripts
+  - task: task-params
+    file: concourse-tutorials/lab-4.3/task_run.yml
+    params:
+      FILE_NAME: ((filename))

@@ -1,0 +1,21 @@
+task-common-config: &task-config
+  platform: linux
+  image_resource:
+    type: docker-image
+    source: {repository: alpine, tag: latest}
+
+jobs:
+- name: job-hooks
+  plan:
+  - task: task-success
+    config:
+      <<: *task-config
+      run:
+        path: echo
+        args: ["Task Succeeded!"]
+  - task: task-failed
+    config:
+      <<: *task-config
+      run:
+        path: echo
+        args: ["Task Failed!"]

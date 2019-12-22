@@ -1,0 +1,13 @@
+---
+resources:
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+jobs:
+- name: job-resource
+  plan:
+  - get: concourse-tutorials
+  - task: task-resource-hello
+    file: concourse-tutorials/lab-3.3/task_hello.yml

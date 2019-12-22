@@ -1,0 +1,26 @@
+---
+resources:
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+- name: python-scripts
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/python-scripts.git
+    branch: develop
+- name: one-minute
+  type: time
+  source:
+    interval: 1m
+
+jobs:
+- name: time-trigger
+  plan:
+  - get: concourse-tutorials
+  - get: python-scripts
+  - get: one-minute
+    trigger: true
+  - task: task-time-trigger
+    file: concourse-tutorials/lab-4.1/task_run.yml

@@ -1,0 +1,27 @@
+---
+resources:
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+- name: python-script
+  type: file-downloader
+  source:
+    url: https://raw.githubusercontent.com/kurmivivek295/python-scripts/master/hello.py
+    filename: app.py
+
+resource_types:
+- name: file-downloader
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
+jobs:
+- name: job-resource-type-hello
+  plan:
+  - get: concourse-tutorials
+  - get: python-script
+  - task: task-resource-type-hello
+    file: concourse-tutorials/lab-3.4/task_hello.yml

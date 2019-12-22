@@ -1,0 +1,21 @@
+---
+resources:
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+- name: python-scripts
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/python-scripts.git
+    branch: develop
+
+jobs:
+- name: git-trigger
+  plan:
+  - get: concourse-tutorials
+  - get: python-scripts
+    trigger: true
+  - task: task-git-trigger
+    file: concourse-tutorials/lab-4.2/task_run.yml

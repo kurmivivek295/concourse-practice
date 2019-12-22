@@ -1,0 +1,12 @@
+filename: hello.py
+
+concourse:
+  git:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+
+hook:
+  source:
+    image:
+      type: docker-image
+      source: {repository: alpine, tag: latest}

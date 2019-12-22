@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: rc-alpine
+
+inputs:
+  - name: go-app-script
+
+run:
+  path: /bin/sh
+  args:
+  - go-app-script/go-app-script.sh
