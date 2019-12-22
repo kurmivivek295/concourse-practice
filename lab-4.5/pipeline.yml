@@ -1,37 +1,28 @@
-task-common-config: &task-config
-  platform: linux
-  image_resource: ((hook.source.image))
-
+---
 resources:
+# to get the task file
 - name: concourse-tutorials
   type: git
-  source: ((concourse.git))
-- name: python-scripts
-  type: git
   source:
-    uri: https://github.com/kurmivivek295/python-scripts.git
-    branch: develop
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+
+# to get the application file from your repository
+- name: python-scripts
+  type: git 
+  source:
+    uri: https://github.com/kurmivivek295/python-scripts.git 
+    branch: develop # specify the branch here to work with
 
 jobs:
-- name: job-hooks
+- name: job-io
+  public: true
   plan:
   - get: concourse-tutorials
   - get: python-scripts
-  - task: task-params
-    file: concourse-tutorials/lab-4.3/task_run.yml
+  - task: task-io
+    file: concourse-tutorials/lab-4.5/task_run.yml
     params:
       FILE_NAME: ((filename))
-  on_success:
-    task: job-successful
-    config:
-      <<: *task-config
-      run:
-        path: echo
-        args: ["Job Done!"]
-  on_failure:
-    task: job-failure
-    config:
-      <<: *task-config
-      run:
-        path: echo
-        args: ["Job Failed!"]    
+  - task: task-cat
+    file: concourse-tutorials/lab-4.5/task_cat.yml

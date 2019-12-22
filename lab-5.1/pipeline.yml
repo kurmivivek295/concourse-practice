@@ -1,0 +1,57 @@
+---
+resources:
+- name: simple-java-app
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/SimpleJavaApp.git
+
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+
+- name: simple-java-cache-image
+  type: docker-image
+  source: ((docker.hub.cache))
+
+- name: simple-java-app-image
+  type: docker-image
+  source: ((docker.hub.app))
+
+- name: version
+  type: semver
+  source: ((semver.git.config))
+    
+jobs:
+- name: job-build-cache-image
+  serial: true
+  public: true
+  plan:
+  - aggregate:
+    - get: concourse-tutorials
+    - get: simple-java-app
+  - task: task-build-cache-image
+    file: concourse-tutorials/lab-5.1/task_build_cache_image.yml
+  - put: simple-java-cache-image
+    params:
+      build: workspace
+
+- name: job-build-app-image
+  serial: true
+  public: true
+  plan:
+  - aggregate:
+    - get: concourse-tutorials
+    - get: simple-java-app
+      passed: [job-build-cache-image]
+      trigger: true
+    - get: version
+  - task: task-test-build-app
+    file: concourse-tutorials/lab-5.1/task_build_app_image.yml
+  - put: simple-java-app-image
+    params:
+      build: workspace
+      tag: version/number
+  - put: version
+    params:
+      bump: minor

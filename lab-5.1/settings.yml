@@ -1,0 +1,23 @@
+docker-credentials: &docker-credentials
+  username: kurmivivek295
+  password: 
+
+docker:
+  hub:
+    cache:
+      <<: *docker-credentials
+      repository: kurmivivek295/simple-java-cache
+      tag: latest
+    app:
+      <<: *docker-credentials
+      repository: kurmivivek295/simple-java-app
+
+semver:
+  git:
+    config:
+      driver: git
+      uri: https://gist.github.com/9d21e8d313ede3066a5c49016e0a62ea.git
+      branch: master
+      file: number
+      username: kurmivivek295
+      password: 

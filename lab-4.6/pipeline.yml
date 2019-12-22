@@ -1,0 +1,46 @@
+---
+resources:
+# to get the task file
+- name: concourse-tutorials
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/concourse-tutorials.git
+    branch: master
+
+# to get the application file from your repository
+- name: python-scripts
+  type: git
+  source:
+    uri: https://github.com/kurmivivek295/python-scripts.git
+    branch: develop # specify the branch here to work with
+
+- name: resource-gist
+  type: git
+  source: ((github.gist.settings))
+
+jobs:
+- name: job-io
+  public: true
+  plan:
+  - get: concourse-tutorials
+  - get: python-scripts
+  - get: resource-gist
+  - task: task-io
+    file: concourse-tutorials/lab-4.6/task_run.yml
+    params:
+      FILE_NAME: ((filename))
+  - task: task-git
+    file: concourse-tutorials/lab-4.6/task_git.yml
+  - put: resource-gist
+    params:
+      repository: updated-gist
+
+- name: job-display
+  public: true
+  plan:
+  - get: concourse-tutorials
+  - get: resource-gist
+    passed: [job-io]
+    trigger: true
+  - task: task-display
+    file: concourse-tutorials/lab-4.6/task_cat.yml
